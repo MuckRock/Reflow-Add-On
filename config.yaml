@@ -1,5 +1,5 @@
 title: Reflow Add-On
-description: This is an updated simple test add-on
+description: A DocumentCloud Add-On that uses K2pdfopt to optimize documents for reading on mobile eReaders and smartphones 
 type: object
 documents:
   - selected
