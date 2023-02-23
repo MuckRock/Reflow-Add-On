@@ -9,6 +9,7 @@ class Reflow(SoftTimeOutAddOn):
         ppi = self.data["ppi"]
         self.set_message("Starting to re-flow documents...")
         for document in self.get_documents():
+            document.pdf
             self.set_message(f"Reflowing {document.title}...")
             process = Popen([f"k2pdfopt {document.title}.pdf -w {height} -h {width} -dpi {ppi} -idpi -2 -x"], stdin=PIPE, shell=True)
             process.communicate(input='\n'.encode('utf-8'))
