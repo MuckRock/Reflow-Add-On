@@ -1,38 +1,20 @@
-"""
-This is a hello world add-on for DocumentCloud.
+from subprocess import Popen, PIPE
+from documentcloud.addon import AddOn, SoftTimeOutAddOn
 
-It demonstrates how to write a add-on which can be activated from the
-DocumentCloud add-on system and run using Github Actions.  It receives data
-from DocumentCloud via the request dispatch and writes data back to
-DocumentCloud using the standard API
-"""
-
-from documentcloud.addon import AddOn
-
-
-class HelloWorld(AddOn):
-    """An example Add-On for DocumentCloud."""
+class Reflow(SoftTimeOutAddOn):
+    """An Add-On that uses k2pdfopt to re-flow a PDF to make it easier to read on e-readers and smartphones"""
+    height = self.data["height"]
+    width = self.data["width"]
+    ppi = self.data["ppi"]
 
     def main(self):
-        """The main add-on functionality goes here."""
-        # fetch your add-on specific data
-        name = self.data.get("name", "world")
-
-        self.set_message("Hello World start!")
-
-        # add a hello note to the first page of each selected document
+        self.set_message("Starting to re-flow documents...")
         for document in self.get_documents():
-            # get_documents will iterate through all documents efficiently,
-            # either selected or by query, dependeing on which is passed in
-            document.annotations.create(f"Hello {name}!", 0)
-
-        with open("hello.txt", "w+") as file_:
-            file_.write("Hello world!")
-            self.upload_file(file_)
-
-        self.set_message("Hello World end!")
-        self.send_mail("Hello World!", "We finished!")
-
+            self.set_message("Reflowing {document.title}...")
+            process = Popen(["k2pdfopt {document.title}.pdf -w {height} -h {width} -dpi {ppi} -idpi -2 -x"], stdin=PIPE, shell=True)
+            process.communicate(input='\n'.encode('utf-8'))
+            self.set_message("Uploading reflowed PDF")
+            self.client.documents.upload(f"{document.title}_k2opt.pdf")
 
 if __name__ == "__main__":
-    HelloWorld().main()
+    Reflow().main()
