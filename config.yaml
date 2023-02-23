@@ -5,11 +5,11 @@ documents:
   - selected
 properties:
   height: 
-    title: E-reader display pixel height. Default is 745.
+    title: E-reader display pixel height. Default is 745
     type: integer
   width:
-    title: E-reader display pixel width. Default is 560.
+    title: E-reader display pixel width. Default is 560
     type: integer
   ppi: 
-    title: E-reader display pixels per inch. Default is 167. 
+    title: E-reader display pixels per inch. Default is 167
     type: integer
