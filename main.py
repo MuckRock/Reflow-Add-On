@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
-from documentcloud.addon import AddOn, SoftTimeOutAddOn
+from documentcloud.addon import AddOn
 
-class Reflow(SoftTimeOutAddOn):
+class Reflow(AddOn):
     """An Add-On that uses k2pdfopt to re-flow a PDF to make it easier to read on e-readers and smartphones"""
     height = self.data["height"]
     width = self.data["width"]
