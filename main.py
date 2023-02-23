@@ -11,7 +11,7 @@ class Reflow(SoftTimeOutAddOn):
         self.set_message("Starting to re-flow documents...")
         for document in self.get_documents():
             # remove white space from document title for commandline to parse input appropriately
-            pdf_name = document.title.strip()
+            pdf_name = document.title.replace(" ", "")
             with open(f"{pdf_name}.pdf", "wb") as file:
                 file.write(document.pdf)
             self.set_message(f"Reflowing {document.title}...")
