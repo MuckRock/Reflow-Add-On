@@ -7,9 +7,12 @@ properties:
   height: 
     title: E-reader display pixel height. Default is 745
     type: integer
+    default: 745
   width:
     title: E-reader display pixel width. Default is 560
     type: integer
+    default: 560
   dpi: 
     title: E-reader display pixels per inch. Default is 167
     type: integer
+    default: 167
