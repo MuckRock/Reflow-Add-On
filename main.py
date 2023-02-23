@@ -1,13 +1,12 @@
 from subprocess import Popen, PIPE
-from documentcloud.addon import AddOn
+from documentcloud.addon import AddOn, SoftTimeOutAddOn
 
-class Reflow(AddOn):
+class Reflow(SoftTimeOutAddOn):
     """An Add-On that uses k2pdfopt to re-flow a PDF to make it easier to read on e-readers and smartphones"""
-    height = self.data["height"]
-    width = self.data["width"]
-    ppi = self.data["ppi"]
-
     def main(self):
+        height = self.data["height"]
+        width = self.data["width"]
+        ppi = self.data["ppi"]
         self.set_message("Starting to re-flow documents...")
         for document in self.get_documents():
             self.set_message(f"Reflowing {document.title}...")
