@@ -22,16 +22,16 @@ class Reflow(SoftTimeOutAddOn):
         dpi = self.data["dpi"]
         self.set_message("Starting to re-flow documents...")
         for document in self.get_documents():
-            # remove white space from document title for commandline to parse input appropriately
-            pdf_name = f"'{document.title}'"
+            # Wrap title of document in whitespace for shell handling
+            pdf_name = f"'{document.title}.pdf'"
             with open(f"{document.title}.pdf", "wb") as file:
                 file.write(document.pdf)
             self.set_message(f"Reflowing {document.title}...")
-            process = Popen([f"k2pdfopt {pdf_name}.pdf -w {height} -h {width} -dpi {dpi} -idpi -2 -x"], stdin=PIPE, shell=True)
+            process = Popen([f"k2pdfopt {pdf_name} -w {height} -h {width} -dpi {dpi} -idpi -2 -x"], stdin=PIPE, shell=True)
             process.communicate(input='\n'.encode('utf-8'))
             self.set_message("Uploading reflowed PDF")
             pdf_name = pdf_name.replace("'", "")
-            self.client.documents.upload(f"{pdf_name}_k2opt.pdf")
+            self.client.documents.upload(f"{document.title}_k2opt.pdf")
 
 if __name__ == "__main__":
     Reflow().main()
