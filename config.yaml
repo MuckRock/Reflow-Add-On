@@ -17,7 +17,7 @@ properties:
     type: integer
     default: 167
   access_level:
-    title: Access level you would like to apply to the reflowed documents (public, private(default), organization)
+    title: Access level for uploaded documents (public, private(default), organization)
     type: string
     default: private
   project_id:
