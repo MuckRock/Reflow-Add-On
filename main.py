@@ -4,6 +4,7 @@ from documentcloud.addon import AddOn, SoftTimeOutAddOn
 
 class Reflow(SoftTimeOutAddOn):
     """An Add-On that uses k2pdfopt to re-flow a PDF to make it easier to read on e-readers and smartphones"""
+    project_id = None
     def check_permissions(self):
         """The user must be a verified journalist to upload a document"""
         self.set_message("Checking permissions...")
@@ -34,7 +35,7 @@ class Reflow(SoftTimeOutAddOn):
             process.communicate(input='\n'.encode('utf-8'))
             self.set_message("Uploading reflowed PDF")
             self.client.documents.upload(f"{document.title}_k2opt.pdf", access=access_level)
-            if self.project_id:
+            if self.project_id is not None:
                 project = self.projects.get(id=project_id)
                 project.documents.append(document)
                 project.save()
