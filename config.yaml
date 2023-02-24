@@ -16,3 +16,10 @@ properties:
     title: E-reader display pixels per inch. Default is 167
     type: integer
     default: 167
+  access_level:
+    title: Access level you would like to apply to the reflowed documents (public, private(default), organization)
+    type: string
+    default: private
+  project_id:
+    title: Project ID of the project you would like the documents uploaded to (optional)
+    type: integer

@@ -20,6 +20,8 @@ class Reflow(SoftTimeOutAddOn):
         height = self.data["height"]
         width = self.data["width"]
         dpi = self.data["dpi"]
+        access_level = self.data["access_level"]
+        project_id = self.data["project_id"]
         self.set_message("Starting to re-flow documents...")
         for document in self.get_documents():
             # Wrap title of document in whitespace for shell handling
@@ -30,8 +32,11 @@ class Reflow(SoftTimeOutAddOn):
             process = Popen([f"k2pdfopt {pdf_name} -w {height} -h {width} -dpi {dpi} -idpi -2 -x"], stdin=PIPE, shell=True)
             process.communicate(input='\n'.encode('utf-8'))
             self.set_message("Uploading reflowed PDF")
-            pdf_name = pdf_name.replace("'", "")
-            self.client.documents.upload(f"{document.title}_k2opt.pdf")
+            self.client.documents.upload(f"{document.title}_k2opt.pdf", access=access_level)
+            if project_id:
+                project = self.projects.get(id=project_id)
+                project.documents.append(document)
+                project.save()
 
 if __name__ == "__main__":
     Reflow().main()
