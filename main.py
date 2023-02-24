@@ -4,7 +4,19 @@ from documentcloud.addon import AddOn, SoftTimeOutAddOn
 
 class Reflow(SoftTimeOutAddOn):
     """An Add-On that uses k2pdfopt to re-flow a PDF to make it easier to read on e-readers and smartphones"""
+    def check_permissions(self):
+        """The user must be a verified journalist to upload a document"""
+        self.set_message("Checking permissions...")
+        user = self.client.users.get("me")
+        if not user.verified_journalist:
+            self.set_message(
+                "You need to be verified to use this add-on. Please verify your "
+                "account here: https://airtable.com/shrZrgdmuOwW0ZLPM"
+            )
+            sys.exit()
+            
     def main(self):
+        self.check_permissions()
         height = self.data["height"]
         width = self.data["width"]
         dpi = self.data["dpi"]
