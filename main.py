@@ -36,7 +36,7 @@ class Reflow(SoftTimeOutAddOn):
             self.set_message("Uploading reflowed PDF")
             self.client.documents.upload(f"{document.title}_k2opt.pdf", access=access_level)
             if self.project_id is not None:
-                project = self.projects.get(id=project_id)
+                project = self.client.projects.get(id=project_id)
                 project.documents.append(document)
                 project.save()
 
