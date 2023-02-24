@@ -15,7 +15,7 @@ class Reflow(SoftTimeOutAddOn):
             with open(f"{pdf_name}.pdf", "wb") as file:
                 file.write(document.pdf)
             self.set_message(f"Reflowing {document.title}...")
-            process = Popen([f"k2pdfopt {pdf_name}.pdf -w {height} -h {width} -dpi {dpi} -idpi -2 -x"], stdin=PIPE, stdout=open(os.devnull, 'w'), shell=True)
+            process = Popen([f"k2pdfopt {pdf_name}.pdf -w {height} -h {width} -dpi {dpi} -idpi -2 -x"], stdin=PIPE, shell=True)
             process.communicate(input='\n'.encode('utf-8'))
             self.set_message("Uploading reflowed PDF")
             pdf_name = pdf_name.replace("'", "")
