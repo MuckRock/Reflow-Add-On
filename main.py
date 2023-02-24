@@ -12,7 +12,7 @@ class Reflow(SoftTimeOutAddOn):
         for document in self.get_documents():
             # remove white space from document title for commandline to parse input appropriately
             pdf_name = f"'{document.title}'"
-            with open(f"{pdf_name}.pdf", "wb") as file:
+            with open(f"{document.title}.pdf", "wb") as file:
                 file.write(document.pdf)
             self.set_message(f"Reflowing {document.title}...")
             process = Popen([f"k2pdfopt {pdf_name}.pdf -w {height} -h {width} -dpi {dpi} -idpi -2 -x"], stdin=PIPE, shell=True)
