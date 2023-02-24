@@ -21,7 +21,8 @@ class Reflow(SoftTimeOutAddOn):
         width = self.data["width"]
         dpi = self.data["dpi"]
         access_level = self.data["access_level"]
-        project_id = self.data["project_id"]
+        if "project_id" in self.data:
+            project_id = self.data["project_id"]
         self.set_message("Starting to re-flow documents...")
         for document in self.get_documents():
             # Wrap title of document in whitespace for shell handling
@@ -33,7 +34,7 @@ class Reflow(SoftTimeOutAddOn):
             process.communicate(input='\n'.encode('utf-8'))
             self.set_message("Uploading reflowed PDF")
             self.client.documents.upload(f"{document.title}_k2opt.pdf", access=access_level)
-            if project_id:
+            if self.project_id:
                 project = self.projects.get(id=project_id)
                 project.documents.append(document)
                 project.save()
