@@ -23,7 +23,7 @@ class Reflow(SoftTimeOutAddOn):
         dpi = self.data["dpi"]
         access_level = self.data["access_level"]
         if "project_id" in self.data:
-            project_id = self.data["project_id"]
+            self.project_id = self.data["project_id"]
         self.set_message("Starting to re-flow documents...")
         for document in self.get_documents():
             # Wrap title of document in whitespace for shell handling
