@@ -34,11 +34,10 @@ class Reflow(SoftTimeOutAddOn):
             process = Popen([f"k2pdfopt {pdf_name} -w {height} -h {width} -dpi {dpi} -idpi -2 -x"], stdin=PIPE, shell=True)
             process.communicate(input='\n'.encode('utf-8'))
             self.set_message("Uploading reflowed PDF")
-            self.client.documents.upload(f"{document.title}_k2opt.pdf", access=access_level)
             if self.project_id is not None:
-                project = self.client.projects.get(id=self.project_id)
-                project.documents.append(document)
-                project.save()
+                self.client.documents.upload(f"{document.title}_k2opt.pdf", access=access_level, project=self.project_id)
+            else:
+                self.client.documents.upload(f"{document.title}_k2opt.pdf", access=access_level)
 
 if __name__ == "__main__":
     Reflow().main()
