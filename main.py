@@ -1,10 +1,15 @@
+""" Uses subprocess to call k2pdfopt program to re-flow PDF """
 import os
+import sys
 from subprocess import Popen, PIPE
-from documentcloud.addon import AddOn, SoftTimeOutAddOn
+from documentcloud.addon import SoftTimeOutAddOn
+
 
 class Reflow(SoftTimeOutAddOn):
-    """An Add-On that uses k2pdfopt to re-flow a PDF to make it easier to read on e-readers and smartphones"""
+    """An Add-On that uses k2pdfopt to re-flow a PDF"""
+
     project_id = None
+
     def check_permissions(self):
         """The user must be a verified journalist to upload a document"""
         self.set_message("Checking permissions...")
@@ -15,8 +20,12 @@ class Reflow(SoftTimeOutAddOn):
                 "account here: https://airtable.com/shrZrgdmuOwW0ZLPM"
             )
             sys.exit()
-            
+
     def main(self):
+        """Checks that user has permissions,
+        grabs the optional project ID, height, width, and DPI,
+        re-flows the PDF, uploads the re-flowed PDF
+        with access level set by UI"""
         self.check_permissions()
         height = self.data["height"]
         width = self.data["width"]
@@ -31,13 +40,25 @@ class Reflow(SoftTimeOutAddOn):
             with open(f"{document.title}.pdf", "wb") as file:
                 file.write(document.pdf)
             self.set_message(f"Reflowing {document.title}...")
-            process = Popen([f"k2pdfopt {pdf_name} -w {height} -h {width} -dpi {dpi} -idpi -2 -x"], stdin=PIPE, shell=True)
-            process.communicate(input='\n'.encode('utf-8'))
+            process = Popen(
+                [f"k2pdfopt {pdf_name} -w {height} -h {width} -dpi {dpi} -idpi -2 -x"],
+                stdin=PIPE,
+                stdout=open(os.devnull, "w"),
+                shell=True,
+            )
+            process.communicate(input="\n".encode("utf-8"))
             self.set_message("Uploading reflowed PDF")
             if self.project_id is not None:
-                self.client.documents.upload(f"{document.title}_k2opt.pdf", access=access_level, project=self.project_id)
+                self.client.documents.upload(
+                    f"{document.title}_k2opt.pdf",
+                    access=access_level,
+                    project=self.project_id,
+                )
             else:
-                self.client.documents.upload(f"{document.title}_k2opt.pdf", access=access_level)
+                self.client.documents.upload(
+                    f"{document.title}_k2opt.pdf", access=access_level
+                )
+
 
 if __name__ == "__main__":
     Reflow().main()
