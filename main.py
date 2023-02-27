@@ -49,8 +49,9 @@ class Reflow(SoftTimeOutAddOn):
             process.communicate(input="\n".encode("utf-8"))
 
             if process.returncode != 0:
-                raise Exception(f'Re-flow failed with the following exception: {process.returncode}')
-    
+                raise Exception(
+                    f"Re-flow failed with the following exception: {process.returncode}"
+                )
             self.set_message("Uploading reflowed PDF")
             if self.project_id is not None:
                 self.client.documents.upload(
