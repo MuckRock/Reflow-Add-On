@@ -8,8 +8,6 @@ from documentcloud.addon import SoftTimeOutAddOn
 class Reflow(SoftTimeOutAddOn):
     """An Add-On that uses k2pdfopt to re-flow a PDF"""
 
-    project_id = None
-
     def check_permissions(self):
         """The user must be a verified journalist to upload a document"""
         self.set_message("Checking permissions...")
@@ -31,8 +29,7 @@ class Reflow(SoftTimeOutAddOn):
         width = self.data["width"]
         dpi = self.data["dpi"]
         access_level = self.data["access_level"]
-        if "project_id" in self.data:
-            self.project_id = self.data["project_id"]
+        project_id = self.data.get("project_id")
         self.set_message("Starting to re-flow documents...")
         for document in self.get_documents():
             # Wrap title of document in whitespace for shell handling
@@ -53,16 +50,16 @@ class Reflow(SoftTimeOutAddOn):
                     f"Re-flow failed with the following exception: {process.returncode}"
                 )
             self.set_message("Uploading reflowed PDF")
-            if self.project_id is not None:
-                self.client.documents.upload(
-                    f"{document.title}_k2opt.pdf",
-                    access=access_level,
-                    project=self.project_id,
-                )
+            if project_id is not None:
+                kwargs = {"project": project_id}
             else:
-                self.client.documents.upload(
-                    f"{document.title}_k2opt.pdf", access=access_level
-                )
+                kwargs = {}
+            self.client.documents.upload(
+                f"{document.title}_k2opt.pdf",
+                access=access_level,
+                project=self.project_id,
+                **kwargs
+            )
 
 
 if __name__ == "__main__":
