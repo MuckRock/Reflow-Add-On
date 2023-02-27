@@ -57,7 +57,6 @@ class Reflow(SoftTimeOutAddOn):
             self.client.documents.upload(
                 f"{document.title}_k2opt.pdf",
                 access=access_level,
-                project=self.project_id,
                 **kwargs
             )
 
