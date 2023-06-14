@@ -23,3 +23,5 @@ properties:
   project_id:
     title: Project ID of the project you would like the documents uploaded to (optional)
     type: integer
+categories:
+  - file
