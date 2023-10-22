@@ -24,9 +24,7 @@ class Reflow(SoftTimeOutAddOn):
         grabs the optional project ID, height, width, and DPI,
         re-flows the PDF, uploads the re-flowed PDF
         with access level set by UI"""
-        if not self.documents:
-            self.set_message("Please select at least one document.")
-            return
+    
         self.check_permissions()
         height = self.data["height"]
         width = self.data["width"]
