@@ -1,5 +1,6 @@
 title: PDF Reflow
 description: A DocumentCloud Add-On that uses K2pdfopt to optimize documents for reading on mobile eReaders and smartphones 
+instructions: ''
 type: object
 documents:
   - selected
