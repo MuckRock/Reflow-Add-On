@@ -24,6 +24,7 @@ class Reflow(SoftTimeOutAddOn):
         grabs the optional project ID, height, width, and DPI,
         re-flows the PDF, uploads the re-flowed PDF
         with access level set by UI"""
+        self.client.session.headers.update({'User-Agent': 'PDF Reflow Add-On'})
     
         self.check_permissions()
         height = self.data["height"]
